@@ -46,7 +46,12 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos");
         }
     }
-
+    @GetMapping("/direccion/{correo}")
+    public ResponseEntity<String> obtenerDireccion(@PathVariable String correo) {
+        Usuario usuario = usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        return ResponseEntity.ok(usuario.getDireccion());
+    }
     @GetMapping("/perfil")
     public ResponseEntity<Usuario> obtenerPerfil(Authentication authentication) {
         String correo = authentication.getName();
