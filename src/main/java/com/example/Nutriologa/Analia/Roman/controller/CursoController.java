@@ -64,9 +64,7 @@ public class CursoController {
 
         // Guardar archivo
         String fileName = file.getOriginalFilename();
-        String filePath = uploadDir + "/" + fileName;
-        // Esto genera la ruta correcta evitando problemas con los slashes
-
+        String filePath = uploadDir + File.separator + fileName; // Asegúrate de usar File.separator para evitar problemas con los slashes
         File dest = new File(filePath);
         try {
             file.transferTo(dest);
@@ -80,7 +78,7 @@ public class CursoController {
         curso.setDescripcion(descripcion);
         curso.setPrecio(precio);
         curso.setPassword(password);
-        curso.setFileUrl(filePath);
+        curso.setFileUrl(filePath); // Guardar ruta del archivo
         curso.setUsuario(usuario);
 
         // Guardar curso en la base de datos
@@ -130,12 +128,8 @@ public class CursoController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        String filePath = curso.getFileUrl();
-        File file = new File(filePath);
-
+        File file = new File(curso.getFileUrl());
         if (!file.exists()) {
-            // Log para depurar
-            System.out.println("El archivo no se encontró en la ruta: " + filePath);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -143,7 +137,7 @@ public class CursoController {
         try {
             mimeType = Files.probeContentType(file.toPath());
         } catch (IOException e) {
-            mimeType = "application/octet-stream";  // Si no se puede determinar el tipo, usar genérico
+            mimeType = "application/octet-stream";
         }
 
         Resource resource = new FileSystemResource(file);
@@ -153,7 +147,6 @@ public class CursoController {
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(resource);
     }
-
 
 
     // Eliminar Curso
