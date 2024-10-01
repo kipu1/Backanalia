@@ -64,9 +64,10 @@ public class CursoController {
             return new ResponseEntity<>("Todos los campos obligatorios deben ser completados", HttpStatus.BAD_REQUEST);
         }
 
-        // Guardar archivo
-        String fileName = file.getOriginalFilename();
-        String filePath = uploadDir + File.separator + fileName; // Asegúrate de usar File.separator para evitar problemas con los slashes
+        // Sanitizar el nombre del archivo
+        String fileName = file.getOriginalFilename().replaceAll("[^a-zA-Z0-9.-]", "_");
+        String filePath = uploadDir + File.separator + fileName;
+
         File dest = new File(filePath);
         try {
             file.transferTo(dest);
