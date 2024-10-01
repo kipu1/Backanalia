@@ -136,16 +136,27 @@ public class CursoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Codificar el nombre del archivo para que sea seguro en la URL
-        String encodedFileName = URLEncoder.encode(file.getName(), StandardCharsets.UTF_8);
+        // Asegúrate de que el archivo tenga la extensión correcta
+        String fileName = file.getName();
+        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+
+        // Obtener el tipo MIME correcto del archivo para asegurarse de que sea un PDF u otro tipo correcto
+        String mimeType;
+        try {
+            mimeType = Files.probeContentType(file.toPath());
+        } catch (IOException e) {
+            mimeType = "application/octet-stream";  // Si no se puede determinar el tipo, usar un tipo por defecto
+        }
 
         Resource resource = new FileSystemResource(file);
 
+        // Usar el nombre del archivo correcto y la extensión en la cabecera
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentType(MediaType.parseMediaType(mimeType))  // Establecer el tipo MIME correcto
                 .body(resource);
     }
+
 
 
     // Eliminar Curso
