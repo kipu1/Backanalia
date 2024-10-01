@@ -42,12 +42,8 @@ public class DireccionController {
 
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Map<String, Object>>> listarDirecciones(Authentication authentication) {
-        String correoUsuario = authentication.getName();
-        Usuario usuario = usuarioRepository.findByCorreo(correoUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        List<Direccion> direcciones = direccionService.obtenerServiciosPorUsuario(usuario);  // Cambia el nombre del método si es necesario
+    public ResponseEntity<List<Map<String, Object>>> listarDirecciones() {
+        List<Direccion> direcciones = direccionService.obtenerTodasLasDirecciones();  // Cambia este método para obtener todas las direcciones
 
         List<Map<String, Object>> respuesta = new ArrayList<>();
         for (Direccion direccion : direcciones) {

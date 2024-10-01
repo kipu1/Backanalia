@@ -22,7 +22,9 @@ public class DireccionService {
     public List<Direccion> obtenerServiciosPorUsuario(Usuario usuario) {
         return direccionRepository.findByUsuario(usuario);
     }
-
+    public List<Direccion> obtenerTodasLasDirecciones() {
+        return direccionRepository.findAll();  // Este método devuelve todas las direcciones de la base de datos
+    }
     public void eliminarServicio(Long id) {
         direccionRepository.deleteById(id);
     }
