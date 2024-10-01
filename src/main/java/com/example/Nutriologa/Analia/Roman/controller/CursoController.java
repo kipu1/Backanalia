@@ -91,15 +91,10 @@ public class CursoController {
 
     // Listar Cursos
     @GetMapping("/listar")
-    public ResponseEntity<List<Map<String, Object>>> listarCursos(Authentication authentication) {
-        // Obtener el correo del usuario autenticado
-        String correoUsuario = authentication.getName();
-        Usuario usuario = usuarioRepository.findByCorreo(correoUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    public ResponseEntity<List<Map<String, Object>>> listarCursos() {
+        List<Curso> cursos = cursoService.obtenerTodosLosCursos();
 
-        List<Curso> cursos = cursoService.obtenerCursosPorUsuario(usuario);
-
-        // Crear una lista de mapas para agregar los detalles de cada curso junto con el teléfono del usuario
+        // Crear una lista de mapas para agregar los detalles de cada curso
         List<Map<String, Object>> respuesta = new ArrayList<>();
         for (Curso curso : cursos) {
             Map<String, Object> cursoConDetalles = new HashMap<>();

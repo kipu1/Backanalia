@@ -46,5 +46,8 @@ public class CursoService {
     public List<Curso> obtenerCursosPorUsuario(Usuario usuario) {
         return cursoRepository.findByUsuario(usuario);
     }
+    public List<Curso> obtenerTodosLosCursos() {
+        return cursoRepository.findAll();
+    }
 
 }

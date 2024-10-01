@@ -30,7 +30,6 @@ public class ServicioService {
         return servicioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
     }
-   
 
     // Nuevo método para obtener todos los servicios
     public List<Servicio> obtenerTodosLosServicios() {
