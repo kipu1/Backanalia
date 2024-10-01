@@ -64,7 +64,8 @@ public class CursoController {
 
         // Guardar archivo
         String fileName = file.getOriginalFilename();
-        String filePath = Paths.get(uploadDir, fileName).toString();  // Esto genera la ruta correcta evitando problemas con los slashes
+        String filePath = uploadDir + "/" + fileName;
+        // Esto genera la ruta correcta evitando problemas con los slashes
 
         File dest = new File(filePath);
         try {
