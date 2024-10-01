@@ -151,6 +151,7 @@ public class CursoController {
     }
 
 
+
     // Eliminar Curso
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarCurso(@PathVariable Long id) {
