@@ -132,6 +132,8 @@ public class CursoController {
         File file = new File(filePath);
 
         if (!file.exists()) {
+            // Log para depurar
+            System.out.println("El archivo no se encontró en la ruta: " + filePath);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
