@@ -35,26 +35,23 @@ public class ServicioController {
         return ResponseEntity.ok(nuevoServicio);
     }
     @GetMapping("/listar")
-    public ResponseEntity<List<Map<String, Object>>> listarServicios(Authentication authentication) {
-        String correoUsuario = authentication.getName();
-        Usuario usuario = usuarioRepository.findByCorreo(correoUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    public ResponseEntity<List<Map<String, Object>>> listarServicios() {
+        List<Servicio> servicios = servicioService.obtenerTodosLosServicios();
 
-        List<Servicio> servicios = servicioService.obtenerServiciosPorUsuario(usuario);
-
-        // Crear una lista de mapas donde cada mapa contiene los detalles del servicio y el teléfono
+        // Crear una lista de mapas donde cada mapa contiene los detalles del servicio
         List<Map<String, Object>> respuesta = new ArrayList<>();
         for (Servicio servicio : servicios) {
             Map<String, Object> servicioConDetalles = new HashMap<>();
-            servicioConDetalles.put("id", servicio.getId());  // Incluir el ID
+            servicioConDetalles.put("id", servicio.getId());
             servicioConDetalles.put("titulo", servicio.getTitulo());
             servicioConDetalles.put("descripcion", servicio.getDescripcion());
-            servicioConDetalles.put("telefonoUsuario", servicio.getTelefonoUsuario()); // Obtener el teléfono del usuario
+            servicioConDetalles.put("telefonoUsuario", servicio.getTelefonoUsuario());
             respuesta.add(servicioConDetalles);
         }
 
         return ResponseEntity.ok(respuesta);
     }
+
 
 
     @DeleteMapping("/eliminar/{id}")
