@@ -55,6 +55,7 @@ public class SecurityConfig {
                                 "/api/usuarios/login",
                                 "/api/citas/listar",
                                 "/api/cursos/**",
+                                "/api/direcciones/**",
                                 "/api/citas/agendar",
                                 "/api/servicios/listar",
                                 "/api/servicios/listar/{id}",
