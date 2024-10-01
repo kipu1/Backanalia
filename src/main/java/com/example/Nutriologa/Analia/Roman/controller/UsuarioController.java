@@ -38,7 +38,7 @@ public class UsuarioController {
         if (token != null) {
             Map<String, String> response = new HashMap<>();
             response.put("nombre", usuario.getNombre());
-            response.put("direccion", usuario.getDireccion());
+
             response.put("telefono", usuario.getTelefono());
             response.put("token", token);
             return ResponseEntity.ok(response);  // Devuelve tanto el nombre como el token
@@ -46,12 +46,7 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos");
         }
     }
-    @GetMapping("/direccion/{correo}")
-    public ResponseEntity<String> obtenerDireccion(@PathVariable String correo) {
-        Usuario usuario = usuarioRepository.findByCorreo(correo)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-        return ResponseEntity.ok(usuario.getDireccion());
-    }
+
     @GetMapping("/perfil")
     public ResponseEntity<Usuario> obtenerPerfil(Authentication authentication) {
         String correo = authentication.getName();
@@ -68,7 +63,7 @@ public class UsuarioController {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
         usuario.setTelefono(usuarioActualizado.getTelefono());
-        usuario.setDireccion(usuarioActualizado.getDireccion());
+
         Usuario usuarioActualizadoResponse = usuarioRepository.save(usuario);
 
         return ResponseEntity.ok(usuarioActualizadoResponse);

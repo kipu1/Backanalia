@@ -24,8 +24,7 @@ public class Usuario implements UserDetails {
     private String correo;
     @Column(nullable = false)
     private String telefono;
-    @Column(columnDefinition = "TEXT")
-    private String direccion;
+
 
     @Column(nullable = false)
     private String contrasena;
@@ -37,6 +36,8 @@ public class Usuario implements UserDetails {
     private List<Curso> cursos = new ArrayList<>();
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Servicio> servicios = new ArrayList<>();
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Direccion> direcciones = new ArrayList<>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;  // Aquí puedes retornar los roles si tienes
@@ -78,12 +79,12 @@ public class Usuario implements UserDetails {
     // Constructor con parámetros
 
 
-    public Usuario(Long id, String nombre, String correo, String telefono, String direccion,  String contrasena) {
+    public Usuario(Long id, String nombre, String correo, String telefono,   String contrasena) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.telefono = telefono;
-        this.direccion = direccion;
+
         this.contrasena = contrasena;
     }
 
@@ -120,13 +121,7 @@ public class Usuario implements UserDetails {
         this.contrasena = contrasena;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
 
     public List<Cita> getCitas() {
         return citas;
@@ -138,6 +133,14 @@ public class Usuario implements UserDetails {
 
     public void setServicios(List<Servicio> servicios) {
         this.servicios = servicios;
+    }
+
+    public List<Direccion> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(List<Direccion> direcciones) {
+        this.direcciones = direcciones;
     }
 
     public void setCitas(List<Cita> citas) {
