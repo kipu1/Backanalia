@@ -114,6 +114,7 @@ public class CursoController {
 
 
     // Descargar Curso con Contraseña
+    // Descargar Curso con Contraseña
     @GetMapping("/descargar/{id}")
     public ResponseEntity<Resource> descargarCurso(@PathVariable Long id, @RequestParam String password) {
         Curso curso = cursoService.obtenerCursoPorId(id);
@@ -125,6 +126,9 @@ public class CursoController {
         if (!curso.getPassword().equals(password)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+
+        // Aquí imprime la URL del archivo para verificar si es correcta
+        System.out.println("Archivo a descargar: " + curso.getFileUrl());
 
         File file = new File(curso.getFileUrl());
         if (!file.exists()) {
@@ -145,12 +149,12 @@ public class CursoController {
 
         Resource resource = new FileSystemResource(file);
 
-        // Usar el nombre del archivo correcto y la extensión en la cabecera
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
-                .contentType(MediaType.parseMediaType(mimeType))  // Establecer el tipo MIME correcto
+                .contentType(MediaType.parseMediaType(mimeType))
                 .body(resource);
     }
+
 
 
 
