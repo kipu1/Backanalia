@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -120,37 +122,27 @@ public class CursoController {
     public ResponseEntity<Resource> descargarCurso(@PathVariable Long id, @RequestParam String password) {
         Curso curso = cursoService.obtenerCursoPorId(id);
 
-        // Logging para depuración
-        System.out.println("ID del curso: " + id);
-        System.out.println("Contraseña recibida: " + password);
-        System.out.println("Contraseña esperada: " + (curso != null ? curso.getPassword() : "Curso no encontrado"));
-
         if (curso == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Retornar 404 si no se encuentra el curso
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (!curso.getPassword().equals(password)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Retornar 403 si la contraseña es incorrecta
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         File file = new File(curso.getFileUrl());
         if (!file.exists()) {
-            System.out.println("El archivo no se encontró en la ruta: " + curso.getFileUrl());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Retornar 404 si el archivo no existe
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        String mimeType;
-        try {
-            mimeType = Files.probeContentType(file.toPath());
-        } catch (IOException e) {
-            mimeType = "application/octet-stream"; // Si no se puede determinar el tipo, usar genérico
-        }
+        // Codificar el nombre del archivo para que sea seguro en la URL
+        String encodedFileName = URLEncoder.encode(file.getName(), StandardCharsets.UTF_8);
 
         Resource resource = new FileSystemResource(file);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-                .contentType(MediaType.parseMediaType(mimeType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
 
