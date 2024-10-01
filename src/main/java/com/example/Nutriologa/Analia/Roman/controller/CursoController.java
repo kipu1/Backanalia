@@ -120,24 +120,30 @@ public class CursoController {
     public ResponseEntity<Resource> descargarCurso(@PathVariable Long id, @RequestParam String password) {
         Curso curso = cursoService.obtenerCursoPorId(id);
 
+        // Logging para depuración
+        System.out.println("ID del curso: " + id);
+        System.out.println("Contraseña recibida: " + password);
+        System.out.println("Contraseña esperada: " + (curso != null ? curso.getPassword() : "Curso no encontrado"));
+
         if (curso == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Retornar 404 si no se encuentra el curso
         }
 
         if (!curso.getPassword().equals(password)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Retornar 403 si la contraseña es incorrecta
         }
 
         File file = new File(curso.getFileUrl());
         if (!file.exists()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            System.out.println("El archivo no se encontró en la ruta: " + curso.getFileUrl());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Retornar 404 si el archivo no existe
         }
 
         String mimeType;
         try {
             mimeType = Files.probeContentType(file.toPath());
         } catch (IOException e) {
-            mimeType = "application/octet-stream";
+            mimeType = "application/octet-stream"; // Si no se puede determinar el tipo, usar genérico
         }
 
         Resource resource = new FileSystemResource(file);
