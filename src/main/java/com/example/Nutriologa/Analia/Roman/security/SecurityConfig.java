@@ -63,10 +63,10 @@ public class SecurityConfig {
                                 "/api/cursos/descargar/{id}",
                                 "/api/cursos/descargar/**",
                                 "/api/usuarios/registro",
-                                "/api/direcciones/**",
+                                "/api/direcciones/listar",
                                 "/archivos/**"  // Permitir acceso público a los archivos PDF
                         ).permitAll()
-                        .requestMatchers("/api/cursos/subir-archivo", "/api/usuarios/perfil",
+                        .requestMatchers("/api/cursos/subir-archivo", "/api/usuarios/perfil", "/api/direcciones/crear",
                                 "/api/citas/historia",  "/api/cursos/crear", "/api/citas/obtener",
                                 "/api/cursos/actualizar/**", "/api/cursos/actualizar/{id}",
                                 "/api/servicios/actualizar/{id}", "/api/servicios/actualizar/**")
