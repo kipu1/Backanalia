@@ -28,15 +28,18 @@ public class DireccionController {
     @PostMapping("/crear")
     public ResponseEntity<Direccion> crearDireccion(@RequestBody Direccion direccion, Authentication authentication) {
         String correoUsuario = authentication.getName();
+        System.out.println("Correo del usuario autenticado: " + correoUsuario);
+
         Usuario usuario = usuarioRepository.findByCorreo(correoUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Aquí es donde tienes que usar la instancia del objeto, no la clase.
-        direccion.setUsuario(usuario);  // Cambia esto para usar la instancia 'direccion'
+        direccion.setUsuario(usuario);  // Asociar la dirección con el usuario autenticado
 
-        Direccion nuevaDireccion = direccionService.guardarServicio(direccion);  // Guarda la dirección con el usuario asociado
+        Direccion nuevaDireccion = direccionService.guardarServicio(direccion);  // Guardar la dirección con el usuario asociado
         return ResponseEntity.ok(nuevaDireccion);
     }
+
+
 
     @GetMapping("/listar")
     public ResponseEntity<List<Map<String, Object>>> listarDirecciones(Authentication authentication) {
