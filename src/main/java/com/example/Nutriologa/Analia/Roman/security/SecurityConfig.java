@@ -86,7 +86,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:4200");
-        configuration.addAllowedOrigin("http://analiaromannutricionista.com");  // Permitir el frontend en Angular
+        configuration.addAllowedOrigin("https://analiaromannutricionista.com");  // Cambiar a https
         configuration.addAllowedMethod("*");  // Permitir todos los métodos HTTP
         configuration.addAllowedHeader("*");  // Permitir todos los encabezados
         configuration.setAllowCredentials(true);  // Permitir el envío de credenciales como tokens o cookies
@@ -94,6 +94,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
 
 
