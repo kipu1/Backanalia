@@ -86,7 +86,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:4200");
-        configuration.addAllowedOrigin("https://analiaromannutricionista.netlify.app");  // Permitir el frontend en Angular
+        configuration.addAllowedOrigin("http://analiaromannutricionista.com");  // Permitir el frontend en Angular
         configuration.addAllowedMethod("*");  // Permitir todos los métodos HTTP
         configuration.addAllowedHeader("*");  // Permitir todos los encabezados
         configuration.setAllowCredentials(true);  // Permitir el envío de credenciales como tokens o cookies
