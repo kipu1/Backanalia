@@ -34,5 +34,8 @@ public class CitaService {
                 .map(Cita::getFechaHora)
                 .collect(Collectors.toList());
     }
+    public boolean isHoraDisponible(LocalDateTime fechaHora) {
+        return citaRepository.countByFechaHora(fechaHora) == 0;
+    }
     // Otros métodos según sea necesario (e.g., encontrar por ID, eliminar, etc.)
 }
