@@ -65,7 +65,19 @@ public class CitaController {
         response.put("disponible", !citaExistente.isPresent()); // Si no hay una cita en esa fecha, está disponible
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/horas-ocupadas")
+    public ResponseEntity<List<String>> obtenerHorasOcupadas(@RequestParam("fecha") LocalDate fecha) {
+        List<Cita> citas = citaRepository.findByFechaHoraBetween(
+                fecha.atStartOfDay(),
+                fecha.plusDays(1).atStartOfDay()
+        );
 
+        List<String> horasOcupadas = citas.stream()
+                .map(cita -> cita.getFechaHora().toLocalTime().toString().substring(0, 5)) // Formato HH:mm
+                .toList();
+
+        return ResponseEntity.ok(horasOcupadas);
+    }
     @GetMapping("/historia/{cedula}")
     public ResponseEntity<List<Cita>> obtenerCitasPorCedula(@PathVariable String cedula) {
         List<Cita> citas = citaRepository.findByCedula(cedula);

@@ -55,6 +55,7 @@ public class SecurityConfig {
                                 "/api/usuarios/login",
                                 "/api/citas/listar",
                                 "/api/citas/verificar-disponibilidad",
+                                "/api/citas/horas-ocupadas",
                                 "/api/cursos/**",
                                 "/api/direcciones/**",
                                 "/api/citas/agendar",
