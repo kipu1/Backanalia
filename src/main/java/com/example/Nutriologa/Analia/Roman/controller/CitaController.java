@@ -12,10 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 @RestController
@@ -35,33 +33,9 @@ public class CitaController {
         Map<String, String> response = new HashMap<>();
 
         try {
-            // Verificar si la fecha es martes, miércoles, jueves o sábado
-            LocalDate fechaCita = cita.getFechaHora().toLocalDate();
-            DayOfWeek diaSemana = fechaCita.getDayOfWeek();
-            if (!(diaSemana == DayOfWeek.TUESDAY || diaSemana == DayOfWeek.WEDNESDAY ||
-                    diaSemana == DayOfWeek.THURSDAY || diaSemana == DayOfWeek.SATURDAY)) {
-                response.put("error", "Solo se pueden agendar citas los martes, miércoles, jueves o sábados.");
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-            }
-
-            // Verificar si la hora está entre 17:30 y 20:30 en intervalos de 30 minutos
-            LocalTime horaCita = cita.getFechaHora().toLocalTime();
-            List<LocalTime> horasValidas = Arrays.asList(
-                    LocalTime.of(17, 30),
-                    LocalTime.of(18, 0),
-                    LocalTime.of(18, 30),
-                    LocalTime.of(19, 0),
-                    LocalTime.of(19, 30),
-                    LocalTime.of(20, 0)
-            );
-
-            if (!horasValidas.contains(horaCita)) {
-                response.put("error", "El horario de la cita debe ser entre 5:30 PM y 8:30 PM, en intervalos de 30 minutos.");
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-            }
-
             // Verificar si la fecha y hora ya están ocupadas
             Optional<Cita> citaExistente = citaRepository.findByFechaHora(cita.getFechaHora());
+
             if (citaExistente.isPresent()) {
                 // Si ya hay una cita con la misma fecha y hora, retornar error
                 response.put("error", "La fecha y hora seleccionada ya está ocupada.");
