@@ -57,6 +57,14 @@ public class CitaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+    @GetMapping("/verificar-disponibilidad")
+    public ResponseEntity<Map<String, Boolean>> verificarDisponibilidad(@RequestParam("fechaHora") LocalDateTime fechaHora) {
+        Optional<Cita> citaExistente = citaRepository.findByFechaHora(fechaHora);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("disponible", !citaExistente.isPresent()); // Si no hay una cita en esa fecha, está disponible
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/historia/{cedula}")
     public ResponseEntity<List<Cita>> obtenerCitasPorCedula(@PathVariable String cedula) {

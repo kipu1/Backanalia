@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/usuarios/login",
                                 "/api/citas/listar",
+                                "/api/citas/verificar-disponibilidad",
                                 "/api/cursos/**",
                                 "/api/direcciones/**",
                                 "/api/citas/agendar",
