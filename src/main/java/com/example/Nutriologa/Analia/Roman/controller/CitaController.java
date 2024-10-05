@@ -14,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @RestController
@@ -60,15 +59,9 @@ public class CitaController {
     }
     @GetMapping("/horarios-ocupados")
     public ResponseEntity<List<LocalDateTime>> obtenerHorariosOcupados(@RequestParam String fecha) {
-        try {
-            LocalDate fechaConvertida = LocalDate.parse(fecha); // Asegúrate de que el formato sea correcto
-            List<LocalDateTime> horariosOcupados = citaService.obtenerHorariosOcupados(fechaConvertida);
-            return ResponseEntity.ok(horariosOcupados);
-        } catch (DateTimeParseException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        List<LocalDateTime> horariosOcupados = citaService.obtenerHorariosOcupados(LocalDate.parse(fecha));
+        return ResponseEntity.ok(horariosOcupados);
     }
-
     @GetMapping("/historia/{cedula}")
     public ResponseEntity<List<Cita>> obtenerCitasPorCedula(@PathVariable String cedula) {
         List<Cita> citas = citaRepository.findByCedula(cedula);
