@@ -15,5 +15,5 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
 
 
     // Método para encontrar todas las citas de una fecha específica
-    List<Cita> findByFechaHoraBetween(LocalDateTime inicio, LocalDateTime fin);
+    List<Cita> findByFechaHoraBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

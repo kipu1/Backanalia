@@ -24,14 +24,16 @@ public class CitaService {
     public List<Cita> findByAll() {return citaRepository.findAll();
     }
     public List<LocalDateTime> obtenerHorariosOcupados(LocalDate fecha) {
-        // Obtener todas las citas en la fecha especificada
-        List<Cita> citasEnFecha = citaRepository.findAll().stream()
-                .filter(cita -> cita.getFechaHora().toLocalDate().equals(fecha))
-                .collect(Collectors.toList());
+        // Convertir la fecha al rango de tiempo para el día completo
+        LocalDateTime startOfDay = fecha.atStartOfDay(); // Inicio del día (00:00)
+        LocalDateTime endOfDay = fecha.atTime(23, 59, 59); // Fin del día (23:59)
 
-        // Devolver los horarios ocupados (fecha y hora) de las citas en esa fecha
-        return citasEnFecha.stream()
-                .map(Cita::getFechaHora)
+        // Buscar las citas ocupadas en ese día
+        List<Cita> citas = citaRepository.findByFechaHoraBetween(startOfDay, endOfDay);
+
+        // Retornar la lista de horarios ocupados
+        return citas.stream()
+                .map(Cita::getFechaHora) // Extraer el campo fechaHora de cada cita
                 .collect(Collectors.toList());
     }
     // Otros métodos según sea necesario (e.g., encontrar por ID, eliminar, etc.)
