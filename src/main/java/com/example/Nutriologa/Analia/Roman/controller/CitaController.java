@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -55,7 +57,11 @@ public class CitaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
-
+    @GetMapping("/horarios-ocupados")
+    public ResponseEntity<List<LocalDateTime>> obtenerHorariosOcupados(@RequestParam String fecha) {
+        List<LocalDateTime> horariosOcupados = citaService.obtenerHorariosOcupados(LocalDate.parse(fecha));
+        return ResponseEntity.ok(horariosOcupados);
+    }
     @GetMapping("/historia/{cedula}")
     public ResponseEntity<List<Cita>> obtenerCitasPorCedula(@PathVariable String cedula) {
         List<Cita> citas = citaRepository.findByCedula(cedula);

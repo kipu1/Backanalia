@@ -12,4 +12,8 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findByUsuario(Usuario usuario);
     List<Cita> findByCedula(String cedula);
     Optional<Cita> findByFechaHora(LocalDateTime fechaHora);
+
+
+    // Método para encontrar todas las citas de una fecha específica
+    List<Cita> findByFechaHoraBetween(LocalDateTime inicio, LocalDateTime fin);
 }
