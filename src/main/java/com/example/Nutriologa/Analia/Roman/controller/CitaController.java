@@ -59,8 +59,13 @@ public class CitaController {
     }
     @GetMapping("/horarios-ocupados")
     public ResponseEntity<List<LocalDateTime>> obtenerHorariosOcupados(@RequestParam String fecha) {
-        List<LocalDateTime> horariosOcupados = citaService.obtenerHorariosOcupados(LocalDate.parse(fecha));
-        return ResponseEntity.ok(horariosOcupados);
+        try {
+            LocalDate fechaConvertida = LocalDate.parse(fecha);
+            List<LocalDateTime> horariosOcupados = citaService.obtenerHorariosOcupados(fechaConvertida);
+            return ResponseEntity.ok(horariosOcupados);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
     @GetMapping("/historia/{cedula}")
     public ResponseEntity<List<Cita>> obtenerCitasPorCedula(@PathVariable String cedula) {
