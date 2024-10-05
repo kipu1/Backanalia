@@ -57,20 +57,19 @@ public class CitaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
-    @GetMapping
-    public ResponseEntity<List<Cita>> obtenerTodasLasCitas() {
-        List<Cita> citas = citaRepository.findAll();
-        return ResponseEntity.ok(citas);
-    }
-
-    // Obtener los horarios ocupados en una fecha específica
     @GetMapping("/horarios-ocupados")
     public ResponseEntity<List<LocalDateTime>> obtenerHorariosOcupados(@RequestParam String fecha) {
         List<LocalDateTime> horariosOcupados = citaService.obtenerHorariosOcupados(LocalDate.parse(fecha));
         return ResponseEntity.ok(horariosOcupados);
     }
-
-    // Endpoint para obtener las citas de un nutriólogo autenticado
+    @GetMapping("/historia/{cedula}")
+    public ResponseEntity<List<Cita>> obtenerCitasPorCedula(@PathVariable String cedula) {
+        List<Cita> citas = citaRepository.findByCedula(cedula);
+        if (citas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(citas);
+    }
     @GetMapping("/listar")
     public ResponseEntity<List<Cita>> listarCitas(Authentication authentication) {
         String correoUsuario = authentication.getName(); // Obtener el correo del usuario autenticado
