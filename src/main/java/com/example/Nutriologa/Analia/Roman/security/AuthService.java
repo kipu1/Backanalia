@@ -3,6 +3,7 @@ package com.example.Nutriologa.Analia.Roman.security;
 import com.example.Nutriologa.Analia.Roman.model.Usuario;
 import com.example.Nutriologa.Analia.Roman.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -45,7 +46,10 @@ public class AuthService {
             throw new BadCredentialsException("Contraseña incorrecta");
         }
     }*/
-
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     public Usuario registrar(Usuario usuario) {
         usuario.setContrasena(bCryptPasswordEncoder.encode(usuario.getContrasena()));
         return usuarioRepository.save(usuario);
@@ -55,10 +59,15 @@ public class AuthService {
         Usuario usuario = usuarioRepository.findByCorreo(correo)
                 .orElseThrow(() -> new BadCredentialsException("Usuario no encontrado"));
 
+        System.out.println("Usuario encontrado: " + usuario.getCorreo());
+
         // Verifica la contraseña
         if (!passwordEncoder.matches(contrasena, usuario.getContrasena())) {
+            System.out.println("Contraseña incorrecta para el usuario: " + correo);
             throw new BadCredentialsException("Contraseña incorrecta");
         }
+
+        System.out.println("Contraseña correcta");
 
         // Crear un objeto UserDetails desde el Usuario
         UserDetails userDetails = new User(usuario.getCorreo(), usuario.getContrasena(), new ArrayList<>());
@@ -73,4 +82,5 @@ public class AuthService {
 
         return resultado;
     }
+
 }

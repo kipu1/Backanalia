@@ -31,21 +31,27 @@ public class UsuarioController {
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Map<String, Object> resultado = authService.login(loginRequest.getCorreo(), loginRequest.getContrasena());
-        Usuario usuario = (Usuario) resultado.get("usuario");
-        String token = (String) resultado.get("token");
+        try {
+            Map<String, Object> resultado = authService.login(loginRequest.getCorreo(), loginRequest.getContrasena());
+            Usuario usuario = (Usuario) resultado.get("usuario");
+            String token = (String) resultado.get("token");
 
-        if (token != null) {
-            Map<String, String> response = new HashMap<>();
-            response.put("nombre", usuario.getNombre());
-
-            response.put("telefono", usuario.getTelefono());
-            response.put("token", token);
-            return ResponseEntity.ok(response);  // Devuelve tanto el nombre como el token
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos");
+            // Si el token es nulo, retorna un error 401
+            if (token != null) {
+                Map<String, String> response = new HashMap<>();
+                response.put("nombre", usuario.getNombre());
+                response.put("telefono", usuario.getTelefono());
+                response.put("token", token);
+                return ResponseEntity.ok(response);  // Devuelve tanto el nombre como el token
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos");
+            }
+        } catch (Exception e) {
+            // Captura cualquier otro error no manejado
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error en la autenticación: " + e.getMessage());
         }
     }
+
 
     @GetMapping("/perfil")
     public ResponseEntity<Usuario> obtenerPerfil(Authentication authentication) {
