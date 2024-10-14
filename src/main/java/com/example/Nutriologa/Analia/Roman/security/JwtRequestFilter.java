@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.warn("JWT Token no presente o no empieza con 'Bearer '");
         }
 
-        // Si el nombre de usuario fue extraído y no hay autenticación previa en el contexto de seguridad
+        // ddSi el nombre de usuario fue extraído y no hay autenticación previa en el contexto de seguridad
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             logger.info("Autenticando usuario: " + username);
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
