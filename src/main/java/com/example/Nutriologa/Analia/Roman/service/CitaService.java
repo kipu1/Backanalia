@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +37,10 @@ public class CitaService {
     }
     public boolean isHoraDisponible(LocalDateTime fechaHora) {
         return citaRepository.countByFechaHora(fechaHora) == 0;
+    }
+    public Cita obtenerCitaPorId(Long id) {
+        Optional<Cita> cita = citaRepository.findById(id);
+        return cita.orElse(null); // Devuelve la cita si existe, de lo contrario, retorna null
     }
     // Otros métodos según sea necesario (e.g., encontrar por ID, eliminar, etc.)
 }

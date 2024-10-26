@@ -33,7 +33,8 @@ public class Cita {
     @JoinColumn(name = "usuario_id")
     @JsonIgnore
     private Usuario usuario;
-
+    @OneToOne(mappedBy = "cita", cascade = CascadeType.ALL)
+    private Pago pago;
     // Constructor vacío requerido por JPA
     public Cita() {
     }
